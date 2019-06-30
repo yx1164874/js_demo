@@ -12,6 +12,7 @@ function bibao(){
     }
 }
 
+
 var bar=bibao();
 
 bar.hello;
