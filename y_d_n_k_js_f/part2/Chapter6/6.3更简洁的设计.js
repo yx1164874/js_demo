@@ -30,7 +30,7 @@ function LoginController() {
 }
 // 把子类关联到父类
 
-LoginController.prototype =Object.create(Controller.prototype);
+LoginController.prototype = Object.create(Controller.prototype);
 LoginController.prototype.getUser = function () {
     return document.getElementById("login_username").value;
 };
@@ -68,7 +68,7 @@ function AuthController(login) {
     this.login = login;
 }
 // 把子类关联到父类
-AuthController.prototype =Object.create(Controller.prototype);
+AuthController.prototype = Object.create(Controller.prototype);
 AuthController.prototype.server = function (url, data) {
     return $.ajax({
         url: url,
@@ -167,6 +167,7 @@ var LoginController = {
 
 var AuthController = Object.create(LoginController);
 AuthController.errors = [];
+
 AuthController.checkAuth = function () {
     var user = this.getUser();
     var pw = this.getPassword();
