@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<script>
+    //1.编写一个方法 spacify('hello world') // => 'h e l l o  w o r l d' 
+    function spacify(str) {
+        return str.split("").join(" ");
+    }
+
+    //2.给String原型对象添加方法 
+    String.prototype.spacify = function () {
+        return str.split("").join(" ");
+    }
+
+    //3.log('hello world') 实现
+    function log() {
+        console.log.apply(console, arguments)
+    }
+
+
+    function log2() {
+        var arg = Array.prototype.slice.call(arguments)
+
+        arg.unshift("(app)")
+        console.log("arg " + arg)
+        console.log.apply(console, arg)
+    }
+
+    function add() {
+        return a + b;
+    }
+
+
+    function sortArg() {
+        var arg = Array.prototype.slice.call(arguments);
+        console.log(arg)
+        var _arg = [];
+        for (var i = 0; i < arg.length; i++) {
+            _arg.unshift(arg[i])
+        }
+        return _arg;
+    }
+
+   function applay(a,b){
+        console.log(a,b);
+   }
+   function call(){
+       console.log(a,b)
+   }
+   function bind(){
+       console.log(a,b)
+   }
+
+   var obj={name:"yx"};
+   function app(a,b,c){
+       console.log("yx  "+this.name)
+       console.log("yx  "+a+b+c)
+   }
+   
+   app.apply(arg,[1,2,3])();
+   var arg=[1,2,3,4,5]
+   arg.push.apply(arg,[1,2,3])
+   console.log(arr)
+</script>
+
+<body>
+
+</body>
+
+</html>
