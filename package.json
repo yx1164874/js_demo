@@ -1,0 +1,22 @@
+{
+  "name": "js_demo",
+  "version": "1.0.0",
+  "description": "js_demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm  start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yx1164874/js_demo.git"
+  },
+  "keywords": [
+    "js_demo"
+  ],
+  "author": "Charlie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yx1164874/js_demo/issues"
+  },
+  "homepage": "https://github.com/yx1164874/js_demo#readme"
+}

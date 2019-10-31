@@ -32,6 +32,8 @@ Promise对象的状态改变，只有两种可能：
 注意，为了行文方便，本章后面的resolved统一只指fulfilled状态，不包含rejected状态。
 */
 
+//2.基本用法
+
 //ES6 规定，Promise对象是一个构造函数，用来生成Promise实例。
 
 
@@ -115,12 +117,158 @@ Promise也有一些缺点。
 //     // console.log("执行完p1,再执行p2",succ)
 // })
 
-const err = new Promise((resolve, reject) => {
-    // resolve("done")
-    reject(new Error("test")) 
+/*
+上面代码中，p1和p2都是 Promise 的实例，
+但是p2的resolve方法将p1作为参数，即一个异步操作的结果是返回另一个异步操作。
 
-}).then((succ) => {
-    console.log("succ", succ)
-}).catch((err) => {
-    // console.log("err")
+注意，这时p1的状态就会传递给p2，也就是说，p1的状态决定了p2的状态。
+如果p1的状态是pending，那么p2的回调函数就会等待p1的状态改变；
+如果p1的状态已经是resolved或者rejected，那么p2的回调函数将会立刻执行。
+
+*/
+
+// new Promise((resolve, reject) => {
+//   resolve(1);
+//   console.log(2);
+// }).then(r => {
+//   console.log(r);
+// });
+// 2
+// 1
+
+/*
+上面代码中，调用resolve(1)以后，后面的console.log(2)还是会执行，并且会首先打印出来。
+这是因为立即 resolved 的 Promise 是在本轮事件循环的末尾执行，总是晚于本轮循环的同步任务。
+
+一般来说，调用resolve或reject以后，Promise 的使命就完成了，后继操作应该放到then方法里面，
+而不应该直接写在resolve或reject的后面。所以，最好在它们前面加上return语句，这样就不会有意外。
+*/
+
+
+// 3.Promise.prototype.then()
+
+
+
+
+// const promise = new Promise(function (resolve, reject) {
+
+//     reject("error");
+// }).then(function (resolve) {
+//     console.log(resolve)
+// }).catch(function (error) {
+//     console.log("error", error);
+// });
+
+/*
+Promise 实例具有then方法，也就是说，then方法是定义在原型对象Promise.prototype上的。
+它的作用是为 Promise 实例添加状态改变时的回调函数。
+前面说过，then方法的第一个参数是resolved状态的回调函数，第二个参数（可选）是rejected状态的回调函数。
+
+then方法返回的是一个新的Promise实例（注意，不是原来那个Promise实例）。
+因此可以采用链式写法，即then方法后面再调用另一个then方法。
+*/
+
+// getJSON('/post/1.json').then(function (post) {
+//     return getJSON(post.commentURL);
+// }).then(function (comments) {
+//     // some code
+// }).catch(function (error) {
+//     // 处理前面三个Promise产生的错误
+// });
+
+/*
+上面代码中，第一个then方法指定的回调函数，返回的是另一个Promise对象。
+这时，第二个then方法指定的回调函数，就会等待这个新的Promise对象状态发生变化。
+如果变为resolved，就调用第一个回调函数，
+如果状态变为rejected，就调用第二个回调函数。
+*/ 
+
+//4.Promise.prototype.catch()
+
+// getJSON('/posts.json').then(function(posts) {
+//   // ...
+// }).catch(function(error) {
+//   // 处理 getJSON 和 前一个回调函数运行时发生的错误
+//   console.log('发生错误！', error);
+// });
+
+/*
+上面代码中，getJSON方法返回一个 Promise 对象，如果该对象状态变为resolved，
+则会调用then方法指定的回调函数；
+如果异步操作抛出错误，状态就会变为rejected，就会调用catch方法指定的回调函数，处理这个错误。
+另外，then方法指定的回调函数，如果运行中抛出错误，也会被catch方法捕获。
+
+*/
+
+/*
+上面代码中，一共有三个 Promise 对象：
+一个由getJSON产生，两个由then产生。
+它们之中任何一个抛出的错误，都会被最后一个catch捕获。
+*/
+
+/*
+一般来说，不要在then方法里面定义 
+Reject 状态的回调函数（即then的第二个参数），
+总是使用catch方法。
+*/
+
+// const someAsyncThing = function () {
+//   return new Promise(function (resolve, reject) {
+//     // 下面一行会报错，因为x没有声明
+//     resolve(x + 2);
+//   });
+// };
+
+// someAsyncThing().then(function () {
+//   console.log('everything is great');
+// });
+
+// setTimeout(() => { console.log(22222) }, 2000);
+// Uncaught (in promise) ReferenceError: x is not defined
+// 123
+
+/*
+上面代码中，someAsyncThing函数产生的 Promise 对象，内部有语法错误。
+浏览器运行到这一行，会打印出错误提示ReferenceError: x is not defined，
+但是不会退出进程、终止脚本执行，
+2 秒之后还是会输出123。这就是说，Promise 内部的错误不会影响到 Promise 外部的代码，
+通俗的说法就是“Promise 会吃掉错误”。
+ 
+*/
+
+// const promise = new Promise(function (resolve, reject) {
+//   resolve('ok');
+//   setTimeout(function () { throw new Error('test') }, 0)
+// });
+// promise.then(function (value) { console.log(value) });
+// ok
+// Uncaught Error: test
+
+/*
+上面代码中，Promise 指定在下一轮“事件循环”再抛出错误。
+到了那个时候，Promise 的运行已经结束了，
+所以这个错误是在 Promise 函数体外抛出的，会冒泡到最外层，成了未捕获的错误。
+
+一般总是建议，Promise 对象后面要跟catch方法，
+这样可以处理 Promise 内部发生的错误。
+catch方法返回的还是一个 Promise 对象，因此后面还可以接着调用then方法。
+*/
+
+
+//5.Promise.prototype.finally() 
+
+/*
+finally方法用于指定不管 Promise 对象最后状态如何，
+都会执行的操作。该方法是 ES2018 引入标准的。
+*/
+
+const promise=new Promise((resolve,reject)=>{
+  resolve("ssssss")
+
+}).then((succ)=>{
+  console.log("succ",succ)
+}).catch(()=>{
+  console.log("catch")
+}).finally(()=>{
+  console.log("finally")
 })
