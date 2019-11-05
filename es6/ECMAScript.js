@@ -1,3 +1,7 @@
+import '@babel/polyfill';
+
+require("@babel/polyfill")
+
 /*
 ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准
 已经在 2015 年 6 月正式发布了。
@@ -67,3 +71,25 @@ $ npm install --save-dev @babel/preset-react
   }
 
 */
+
+//注意，以下所有 Babel 工具和模块的使用，都必须先写好.babelrc。
+
+// 命令行转码
+// Babel 提供命令行工具@babel/cli，用于命令行转码。
+// npm install --save-dev @babel/cli
+
+/*
+@babel/polyfill
+Babel 默认只转换新的 JavaScript 句法（syntax），
+而不转换新的 API，比如
+Iterator、Generator、Set、Map、Proxy、Reflect、Symbol、Promise等全局对象，
+以及一些定义在全局对象上的方法（比如Object.assign）都不会转码。
+举例来说，ES6 在Array对象上新增了Array.from方法。
+Babel 就不会转码这个方法。
+如果想让这个方法运行，必须使用babel-polyfill，为当前环境提供一个垫片。
+
+安装命令如下。
+//npm install --save-dev @babel/polyfill
+*/
+
+

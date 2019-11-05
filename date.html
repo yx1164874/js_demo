@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<script>
+
+    function compareDate(startTime, endTime) {
+        var date = new Date();
+        var year = parseInt(date.getFullYear());
+        var month = parseInt((date.getMonth() + 1 >= 10) ? date.getMonth() + 1 : "0" + (date.getMonth() + 1));
+        var day = parseInt((date.getDate() >= 10) ? date.getDate() : "0" + date.getDate());
+        var startTime = startTime.split(" ")[0];
+        var endTime = endTime.split(" ")[0];
+        var startYear = parseInt(startTime.split("-")[0]);
+        var endYear = parseInt(endTime.split("-")[0]);
+        var startMonth = parseInt(startTime.split("-")[1]);
+        var endMonth = parseInt(endTime.split("-")[1]);
+        var startDay = parseInt(startTime.split("-")[2]);
+        var endDay = parseInt(endTime.split("-")[2]);
+        console.log("date", year+"-"+month+"-"+day)
+        console.log("startTime", startTime)
+        console.log("endTime", endTime)
+        console.log("startYear", startYear)
+        console.log("endYear", endYear)
+        console.log("startMonth", startMonth)
+        console.log("endMonth", endMonth)
+        console.log("startDay", startDay)
+        console.log("endDay", endDay)
+        if (year > startYear && year < endYear) {
+            return true
+        } else if (year == startYear && year == endYear) {
+            if (month > startMonth && month < endMonth) {
+                return true
+            } else if (month == startMonth && month == endMonth) {
+                if (day > startDay && day < endMonth) {
+                    return true
+                } else if (day == startDay && day == endDay) {
+                    return true
+                } else if (day > startDay && day == endDay) {
+                    return true
+                } else if (day == startDay && day < endDay) {
+                    return true
+                } else {
+                    return false
+                }
+            } else if (month > startMonth && month == endMonth) {
+                if (day < endDay) {
+                    return true
+                } else if (day > endDay) {
+                    return false
+                } else {
+                    return true
+                }
+            } else if (month == startMonth && month < endMonth) {
+                if (day < endDay) {
+                    return true
+                } else if (day > endDay) {
+                    return false
+                } else {
+                    return true
+                }
+            } else {
+                return false
+            }
+        } else if (year > startYear && year == endYear) {
+            if (month < endMonth) {
+                return true
+            } else if (month > endMonth) {
+                return false
+            } else {
+                if (day < endDay) {
+                    return true
+                } else if (day > endDay) {
+                    return false
+                } else {
+                    return true
+                }
+            }
+        } else if (year == startYear && year < endYear) {
+            if (month < startMonth) {
+                return false
+            } else if (month > startMonth) {
+                return true
+            } else {
+                if (day < startDay) {
+                    return false
+                } else if (day > startDay) {
+                    return true
+                } else {
+                    return true
+                }
+            }
+        } else {
+            return false
+        }
+
+    }
+    function set() {
+        if ((year > startYear && year < endYear) || (year == startYear && year == endYear) || (year == startYear && year < endYear) || (year > startYear && year == endYear)) {
+            if ((month > startMonth && month < endMonth) || (month == startMonth && month == endMonth) || (month == startMonth && month < endMonth) || (month > startMonth && month == endMonth)) {
+                if ((day > startDay && day < endDay) || (day == startDay && day == endDay) || (day == startDay && day < endDay) || (day > startDay && day == endDay)) {
+                    console.log("444")
+                    return true
+                } else {
+                    console.log("333")
+                    return false
+                }
+            } else {
+                console.log("222")
+                return false
+            }
+        } else {
+            console.log("111")
+            return false
+        }
+    }
+    function add() {
+        if (year < parseInt(startTime.split("-")[0]) || year > parseInt(endTime.split("-")[0])) {
+            console.log("111")
+            return false;
+            return;
+        }
+        if (year == parseInt(startTime.split("-")[0]) && year == parseInt(endTime.split("-")[0])) {
+            if (month < parseInt(startTime.split("-")[1]) || month > parseInt(endTime.split("-")[1])) {
+                console.log("222")
+                return false;
+                return;
+            }
+            if (month == parseInt(startTime.split("-")[1]) && month == parseInt(endTime.split("-")[1])) {
+
+                if (day < parseInt(startTime.split("-")[2]) || day > parseInt(endTime.split("-")[2])) {
+                    console.log("333")
+
+                    return false;
+                    return;
+                }
+                return true
+                return;
+                console.log("444")
+
+            }
+            console.log("555")
+            return true
+            return;
+        }
+        console.log("666")
+        return true
+    }
+</script>
+
+<body>
+
+</body>
+
+</html>
